@@ -2,11 +2,13 @@ package com.reserva.service;
 
 import com.reserva.dto.DetailedHotelResponse;
 import com.reserva.entities.Hotel;
+import com.reserva.entities.Room;
 import com.reserva.mapper.HotelMapper;
 import com.reserva.repository.HotelRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -16,7 +18,8 @@ public class HotelService {
     private final HotelMapper hotelMapper;
 
     public void saveHotel(Hotel hotel) {
-        hotel.getRooms().forEach(hotel::addRoom);
+        List<Room> rooms = new ArrayList<>(hotel.getRooms()); // copy the list
+        rooms.forEach(hotel::addRoom);
         hotelRepository.save(hotel);
     }
 

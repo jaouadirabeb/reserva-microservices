@@ -21,7 +21,7 @@ public class CustomerService {
    private final RoomClient roomClient;
 
     public void saveCustomer(Customer customer) {
-            customer.getReservations().forEach(r -> r.setCustomer(customer));
+        customer.getReservations().forEach(r -> r.setCustomer(customer));
             customerRepository.save(customer);
     }
     public List<CustomerReservationsResponse> findAllCustomer() {

@@ -32,10 +32,10 @@ services:
       - zipkin
 
 networks:
-  postgres:
-    driver: bridge
   zipkin:
     driver: bridge
 
+  postgres:
+    driver: bridge
 volumes:
   postgres:
