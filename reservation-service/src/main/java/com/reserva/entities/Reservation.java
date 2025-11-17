@@ -15,6 +15,7 @@ import java.time.LocalDate;
 public class Reservation {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -31,4 +32,5 @@ public class Reservation {
     private ReservationStatus status;
 
     private BigDecimal totalPrice;
+
 }
