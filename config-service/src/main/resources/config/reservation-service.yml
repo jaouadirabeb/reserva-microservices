@@ -1,0 +1,33 @@
+spring:
+  application:
+    name: reservation-service
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://127.0.0.1:5433/reservations
+    username: postgres
+    password: postgres
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+server:
+  port: 9002
+logging:
+  level:
+    org.springframework.jdbc: DEBUG
+    org.hibernate.SQL: DEBUG
+application:
+  config:
+    room-url: http://localhost:9222/api/v1/rooms/
+management:
+  tracing:
+    sampling:
+      probability: 1.0

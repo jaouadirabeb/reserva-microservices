@@ -1,0 +1,41 @@
+services:
+  hotel-db:
+    image: postgres:latest
+    container_name: postgres-db-hotels
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: hotels
+      PGDATA: /data/postgres
+    volumes:
+      - postgres:/data/postgres
+    ports:
+      - "5430:5432"  # expose PostgreSQL to host
+    networks:
+      - postgres
+    restart: unless-stopped
+  reservation-db:
+    image: postgres:latest
+    container_name: postgres-db-reserv
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: reservations
+    ports:
+      - "5433:5432"
+  zipkin:
+    container_name: zipkin
+    image: openzipkin/zipkin
+    ports:
+      - 9411:9411
+    networks:
+      - zipkin
+
+networks:
+  postgres:
+    driver: bridge
+  zipkin:
+    driver: bridge
+
+volumes:
+  postgres:

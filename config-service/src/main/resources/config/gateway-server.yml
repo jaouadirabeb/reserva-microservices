@@ -1,0 +1,27 @@
+spring:
+  application:
+  cloud:
+    gateway:
+      server:
+        webflux:
+          discovery:
+            locator:
+              enabled: true
+          routes:
+            - id : reservations
+              uri: http://localhost:9002
+              predicates:
+                - Path=/api/v1/reservations/**,/api/v1/customers/**
+            - id : hotels
+              uri: http://localhost:9001
+              predicates:
+                - Path=/api/v1/hotels/**,/api/v1/rooms/**
+server:
+  port: 9222
+eureka:
+  client:
+    register-with-eureka: false
+management:
+  tracing:
+    sampling:
+      probability: 1.0
