@@ -1,15 +1,11 @@
 package com.reserva.service;
 
-
 import com.reserva.dto.DetailedRoomResponse;
 import com.reserva.entities.Room;
-import com.reserva.mapper.HotelMapper;
 import com.reserva.mapper.RoomMapper;
 import com.reserva.repository.RoomRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -23,4 +19,6 @@ public class RoomService {
                 .orElseThrow(() -> new RuntimeException("Room not found"));
         return roomMapper.toDetailedRoomResponse(room);
     }
+
+
 }
