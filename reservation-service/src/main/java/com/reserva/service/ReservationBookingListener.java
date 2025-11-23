@@ -1,5 +1,6 @@
 package com.reserva.service;
 
+import com.reserva.events.RoomBookingRollbackEvent;
 import com.reserva.entities.ReservationStatus;
 import com.reserva.events.RoomBookingResultEvent;
 import com.reserva.repository.ReservationRepository;
@@ -14,10 +15,11 @@ import org.springframework.stereotype.Service;
 public class ReservationBookingListener {
 
     private final ReservationRepository reservationRepository;
+    private final EventPublisher eventPublisher;
 
     @KafkaListener(topics = "reservation.booking.result", containerFactory = "roomBookingResultFactory")
     public void onRoomBookingResult(RoomBookingResultEvent event) {
-        reservationRepository.findById(event.reservationId()).ifPresent(reservation -> {
+       try{ reservationRepository.findById(event.reservationId()).ifPresent(reservation -> {
             if (event.booked()) {
                 reservation.setStatus(ReservationStatus.BOOKED);
                 reservation.setTotalPrice(event.totalPrice());
@@ -28,5 +30,16 @@ public class ReservationBookingListener {
             }
             reservationRepository.save(reservation);
         });
+       } catch(Exception e){
+           log.error("Failed to update reservation {}. Sending rollback event...", event.reservationId(), e);
+
+           // 🔥 Publish rollback event to cancel room booking in Hotel MS
+           RoomBookingRollbackEvent rollbackEvent = new RoomBookingRollbackEvent(
+                   event.reservationId(),
+                   "Reservation MS failed to save status"
+           );
+
+           eventPublisher.publish(RoomBookingRollbackEvent.TOPIC, rollbackEvent.reservationId().toString(), rollbackEvent);
+       }
     }
 }

@@ -74,4 +74,9 @@ public class RoomReservationService {
 
         return pricePerNight.multiply(BigDecimal.valueOf(nights));
     }
+
+    @Transactional
+    public void removeReservation(Long reservationId) {
+        roomReservationRepository.deleteById(reservationId);
+    }
 }

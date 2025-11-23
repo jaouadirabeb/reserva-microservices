@@ -28,4 +28,5 @@ public class RoomReservation {
 
     @Enumerated(EnumType.STRING)
     private RoomReservationStatus status ;
+
 }
