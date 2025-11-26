@@ -1,5 +1,12 @@
 spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8080/realms/reserva
+
   application:
+    name: gateway-server
   cloud:
     gateway:
       server:
@@ -8,14 +15,28 @@ spring:
             locator:
               enabled: true
           routes:
-            - id : reservations
+            - id : reservations-route
               uri: http://localhost:9002
               predicates:
-                - Path=/api/v1/reservations/**,/api/v1/customers/**
-            - id : hotels
+                - Path=/api/v1/reservations/**
+
+
+            - id: customers-route
+              uri: http://localhost:9002
+              predicates:
+                - Path=/api/v1/customers/**
+
+            - id : hotels-route
               uri: http://localhost:9001
               predicates:
-                - Path=/api/v1/hotels/**,/api/v1/rooms/**
+                - Path=/api/v1/hotels/**
+
+
+            - id : room-route
+              uri: http://localhost:9001
+              predicates:
+                - Path=/api/v1/rooms/**
+
 server:
   port: 9222
 eureka:
@@ -25,3 +46,8 @@ management:
   tracing:
     sampling:
       probability: 1.0
+
+logging.level:
+  org.springframework.cloud.gateway: DEBUG
+  org.springframework.security: DEBUG
+  org.springframework.web.reactive.function.client: TRACE

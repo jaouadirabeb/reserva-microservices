@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,5 +28,11 @@ public class ReservationController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<List<ReservationResponse>> findAllReservations() {
         return ResponseEntity.ok(reservationService.findAllReservations());
+    }
+
+    @GetMapping("/debug")
+    public ResponseEntity<?> debugJwt(Authentication authentication) {
+        System.out.println("AUTH = " + authentication);
+        return ResponseEntity.ok(authentication);
     }
 }

@@ -60,7 +60,7 @@ services:
     image: provectuslabs/kafka-ui:latest
     container_name: kafka-ui
     ports:
-      - "8080:8080"
+      - "8081:8081"
     depends_on:
       - kafka
     environment:
@@ -69,12 +69,46 @@ services:
       KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
 
 
+  keycloak:
+    image: quay.io/keycloak/keycloak:21.1.1
+    container_name: keycloak
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    command: start-dev
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    networks:
+      - keycloak-network
+
+  # Optional: PostgreSQL for Keycloak persistence
+  postgres-k:
+    image: postgres:latest
+    container_name: keycloak-db
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: keycloak
+    ports:
+      - "5434:5432"
+    networks:
+      - keycloak-network
+    restart: unless-stopped
+
+
+
+
 networks:
   zipkin:
     driver: bridge
 
   postgres:
     driver: bridge
+
+  keycloak-network:
+    driver: bridge
+
 volumes:
   postgres:
   kafka_data:

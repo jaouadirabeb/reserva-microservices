@@ -3,3 +3,9 @@ spring:
     name: gateway-server
   config:
     import: optional:configserver:http://localhost:8888
+  cloud:
+    gateway:
+      server:
+        webflux:
+          default-filters:
+            - TokenRelay
