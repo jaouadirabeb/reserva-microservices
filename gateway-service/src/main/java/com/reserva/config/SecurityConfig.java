@@ -21,7 +21,7 @@ public class SecurityConfig {
                         .anyExchange().authenticated()
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2
-                        .jwt(jwt -> {})   // <-- new syntax (not deprecated)
+                        .jwt(jwt -> {})
                 );
 
         return http.build();
